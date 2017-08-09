@@ -1,0 +1,21 @@
+<h4>Кошелёк пользователя ({{userAmount}})</h4>
+<div>
+  <span *ngFor="let coin of userPocket">
+      <button [disabled]='coin.count == 0' (click)='push(coin)'>{{coin.amount}} ({{coin.count}})</button>
+    </span>
+</div>
+<h4>Внесенно: {{pendingAmount}}</h4>
+<h4 *ngIf="showMessage">Сообщение: {{message}}</h4>
+<button (click)='change()'>Сдача</button>
+<h4>Кошелёк машины ({{machineAmount}})</h4>
+<div> |
+  <span *ngFor="let coin of machinePocket">
+      <span>{{coin.amount}} ({{coin.count}}) |</span>
+    </span>
+</div>
+<h4>Товары</h4>
+<div>
+  <span *ngFor="let product of products">
+      <button [disabled]='product.count == 0' (click)='buy(product)'>{{product.name}} - {{product.price}} ({{product.count}})</button>
+    </span>
+</div>
