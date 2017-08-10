@@ -1,39 +1,50 @@
 import { Injectable } from '@angular/core';
 import { Coin, push, merge } from './coin';
 import { Product } from './product';
+import { LocalStorageService } from './local-storage.service';
 
 @Injectable()
 export class VendingMachineService {
     
-    userPocket: Coin[] = [
-        new Coin(1, '', 1, 10),
-        new Coin(2, '', 2, 30),
-        new Coin(5, '', 5, 20),
-        new Coin(10, '', 10, 15),
-    ];
+    userPocket: Coin[] = [];
 
-    machinePocket: Coin[] = [
-        new Coin(1, '', 1, 100),
-        new Coin(2, '', 2, 100),
-        new Coin(5, '', 5, 100),
-        new Coin(10, '', 10, 100),
-    ];
+    machinePocket: Coin[] = [];
 
-    products: Product[] = [
-        new Product(13, 'Чай', 13, 10),
-        new Product(18, 'Кофе', 18, 20),
-        new Product(21, 'Кофе с молоком', 21, 20),
-        new Product(35, 'Сок', 35, 15),
-    ];
+    products: Product[] = [];
 
     get pendingAmount(): number {
         return this.pendingAmountValue;
+    }
+
+    constructor(private localStorageService: LocalStorageService) {
+        this.userPocket = this.localStorageService.get('user-pocket', [
+            new Coin(1, '', 1, 10),
+            new Coin(2, '', 2, 30),
+            new Coin(5, '', 5, 20),
+            new Coin(10, '', 10, 15),
+        ]).map(c => new Coin(c.id, c.title, c.amount, c.count));
+        this.machinePocket = this.localStorageService.get('machine-pocket', [
+            new Coin(1, '', 1, 100),
+            new Coin(2, '', 2, 100),
+            new Coin(5, '', 5, 100),
+            new Coin(10, '', 10, 100),
+        ]).map(c => new Coin(c.id, c.title, c.amount, c.count));
+        this.products = this.localStorageService.get('products', [
+            new Product(13, 'Чай', 13, 10),
+            new Product(18, 'Кофе', 18, 20),
+            new Product(21, 'Кофе с молоком', 21, 20),
+            new Product(35, 'Сок', 35, 15),
+        ]).map(p => new Product(p.id, p.name, p.price, p.count));
+        this.pendingAmountValue = this.localStorageService.get('pending-amount-value', 0);
     }
 
     pushCoin(coin: Coin): void {
         this.userPocket.find(p => p.id == coin.id).count--;
         this.pendingAmountValue += coin.amount;
         push(this.machinePocket, coin.id);
+        this.localStorageService.set('user-pocket', this.userPocket);
+        this.localStorageService.set('machine-pocket', this.machinePocket);
+        this.localStorageService.set('pending-amount-value', this.pendingAmountValue);
     }
 
     getProduct(id: number): boolean {
@@ -43,6 +54,9 @@ export class VendingMachineService {
         }
         product.count--;
         this.pendingAmountValue -= product.price;
+
+        this.localStorageService.set('products', this.products);
+        this.localStorageService.set('pending-amount-value', this.pendingAmountValue);
 
         return true;
     }
@@ -65,8 +79,12 @@ export class VendingMachineService {
         merge(this.userPocket, change);
         this.pendingAmountValue = changeAmount;
 
+        this.localStorageService.set('user-pocket', this.userPocket);
+        this.localStorageService.set('machine-pocket', this.machinePocket);
+        this.localStorageService.set('pending-amount-value', this.pendingAmountValue);
+
         return this.pendingAmountValue == 0;
     }
 
-    private pendingAmountValue: number = 0;
+    private pendingAmountValue: number;
 }

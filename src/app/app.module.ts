@@ -11,6 +11,7 @@ import { AppComponent }         from './app.component';
 import { VendingMachineComponent }   from './vending-machine.component';
 
 import { VendingMachineService } from './vending-machine.service';
+import { LocalStorageService } from './local-storage.service';
 
 @NgModule({
   imports: [
@@ -21,9 +22,9 @@ import { VendingMachineService } from './vending-machine.service';
   ],
   declarations: [
     AppComponent,
-    VendingMachineComponent
+    VendingMachineComponent,
   ],
-  providers: [ VendingMachineService ],
+  providers: [ VendingMachineService, LocalStorageService ],
   bootstrap: [ AppComponent ]
 })
 export class AppModule { }
