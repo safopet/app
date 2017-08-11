@@ -5,7 +5,8 @@ import { Coin } from './coin';
 
 @Component({
 	selector: 'vending-machine',
-	templateUrl: 'vending-machine.component.html'
+	templateUrl: 'vending-machine.component.html',
+	styleUrls: ['vending-machine.component.css']
 })
 
 export class VendingMachineComponent implements OnInit {
@@ -42,26 +43,22 @@ export class VendingMachineComponent implements OnInit {
 		return this.vendingMachineService.pendingAmount;
 	} 
 
-	message: string = null;
-	
-	get showMessage(): boolean {
-		return this.message !== null;
-	}
+	message: string;
 
 	constructor(private vendingMachineService: VendingMachineService) {
-
+		this.message = this.defaultMessage;
 	}
 
 	ngOnInit() { }
 
 	push(coin: Coin) {
 		this.vendingMachineService.pushCoin(coin);
-		this.message = null;
+		this.message = this.defaultMessage;
 	}
 
 	change(): void {
 		this.vendingMachineService.getChange();
-		this.message = null;
+		this.message = this.defaultMessage;
 	}
 
 	buy(product: Product) {
@@ -72,4 +69,6 @@ export class VendingMachineComponent implements OnInit {
 			this.message = 'Спасибо!';
 		}
 	}
+
+	private defaultMessage: string = 'Добавте монет или выберите товар';
 }

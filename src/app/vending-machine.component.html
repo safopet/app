@@ -1,21 +1,38 @@
 <h4>Кошелёк пользователя ({{userAmount}})</h4>
 <div>
-  <span *ngFor="let coin of userPocket">
-      <button [disabled]='coin.count == 0' (click)='push(coin)'>{{coin.amount}} ({{coin.count}})</button>
-    </span>
+    <button *ngFor="let coin of userPocket" md-raised-button [disabled]='coin.count == 0' (click)='push(coin)' class="coin" >
+      <i class="material-icons">attach_money</i>
+      {{coin.amount}}
+      <div class="count">{{coin.count}}</div>
+    </button>
 </div>
-<h4>Внесенно: {{pendingAmount}}</h4>
-<h4 *ngIf="showMessage">Сообщение: {{message}}</h4>
-<button (click)='change()'>Сдача</button>
+  <div class='screen'>
+    <table>
+      <tr>
+        <td> <strong>Внесенно:</strong></td><td>{{pendingAmount}}</td>
+      </tr>
+      <tr>
+        <td><strong>Сообщение:</strong></td>
+        <td>{{message}}</td>
+      </tr>
+    </table>
+  </div>
+<button md-raised-button (click)='change()' mdTooltip='Сдача' class="change">
+  <i class="material-icons">settings_backup_restore</i>
+  Сдача
+</button>
 <h4>Кошелёк машины ({{machineAmount}})</h4>
-<div> |
-  <span *ngFor="let coin of machinePocket">
-      <span>{{coin.amount}} ({{coin.count}}) |</span>
-    </span>
-</div>
+<md-chip-list>
+  <md-chip *ngFor="let coin of machinePocket" selected="true" style="margin: 2px">
+    <i class="material-icons">attach_money</i>
+      {{coin.amount}} &nbsp; <div class="machine-pocket-coin-count">&nbsp;{{coin.count}}</div>
+    </md-chip>
+</md-chip-list>
 <h4>Товары</h4>
 <div>
-  <span *ngFor="let product of products">
-      <button [disabled]='product.count == 0' (click)='buy(product)'>{{product.name}} - {{product.price}} ({{product.count}})</button>
-    </span>
+    <button *ngFor="let product of products" md-raised-button [disabled]='product.count == 0' (click)='buy(product)' class="goods">
+      {{product.name}}
+      <i class="material-icons">attach_money</i>{{product.price}}
+      <div class="count">{{product.count}}</div>
+    </button>
 </div>

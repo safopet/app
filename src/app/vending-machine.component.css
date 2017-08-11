@@ -1,3 +1,53 @@
-.vending-machine {
+button {
+    margin: 2px;
+}
 
+.coin {
+    background: lemonchiffon;
+    color: #444;
+}
+
+.change {
+    background: darkgoldenrod;
+    color: black;
+}
+
+.goods {
+    background: lightcoral;
+    color: #444;
+}
+
+.count {
+    border-top: 1px solid #444;
+    padding: 0;
+    margin: 0;
+}
+
+.machine-pocket-coin-count {
+    border-Left: 1px solid white;
+    padding: 2;
+    margin: 2;
+}
+
+button:disabled .count {
+    border-top: 1px solid rgba(0,0,0,0.38);
+    padding: 0;
+    margin: 0;
+}
+
+button:disabled .machine-pocket-coin-count {
+    border-top: 1px solid rgba(0,0,0,0.38);
+    padding: 0;
+    margin: 0;
+}
+
+.screen {
+    margin: 20px 2px 20px 2px;
+    padding: 5px;
+    background: goldenrod;
+    box-shadow: inset 0px 0px 10px 0px rgba(0,0,0,0.5);;
+    border-radius: 4px;
+    color: #444;
+    font-size: small;    
+    width: 400px;
 }
