@@ -10,18 +10,28 @@ export class Coin {
     get totalAmount(): number {
         return this.amount * this.count;
     }
+
+    one() : Coin {
+        return new Coin(this.id, this.title, this.amount, 1);
+    }
 }
 
-export function push(pocket: Coin[], coinId:number): Coin[] {
-    let coin = pocket.find(c => c.id == coinId);
-    coin.count++;
-    return pocket;
+export function copy(c: Coin) : Coin {
+    return new Coin(c.id, c.title, c.amount, c.count);
 }
+
 
 export function merge(pocket: Coin[], coins: Coin[]): Coin[] {
-    for(let c of coins) {
-        let pocketCoin = pocket.find(p => p.id == c.id);
-        pocketCoin.count += c.count;
+    let result: Coin[] = pocket.map(c => copy(c));
+
+    for(let c of coins) {        
+        let r = result.find(p => p.id == c.id);
+        if (!r) {
+            result.push(copy(c));
+        } 
+        else {
+            r.count += c.count;
+        }
     }
-    return pocket;
+    return result;
 }

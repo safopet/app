@@ -2,6 +2,8 @@ import { NgModule }      from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule }   from '@angular/forms';
 import { HttpModule }    from '@angular/http';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MdButtonModule, MdTooltipModule, MdIconModule, MdChipsModule } from '@angular/material';
 
 import { AppRoutingModule } from './app-routing.module';
 
@@ -18,7 +20,12 @@ import { LocalStorageService } from './local-storage.service';
     BrowserModule,
     FormsModule,
     HttpModule,
-    AppRoutingModule
+    AppRoutingModule,
+    BrowserAnimationsModule,
+    MdButtonModule,
+    MdTooltipModule,
+    MdIconModule,
+    MdChipsModule
   ],
   declarations: [
     AppComponent,

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Coin, push, merge } from './coin';
+import { Coin, merge, copy } from './coin';
 import { Product } from './product';
 import { LocalStorageService } from './local-storage.service';
 
@@ -22,13 +22,13 @@ export class VendingMachineService {
             new Coin(2, '', 2, 30),
             new Coin(5, '', 5, 20),
             new Coin(10, '', 10, 15),
-        ]).map(c => new Coin(c.id, c.title, c.amount, c.count));
+        ]).map(c => copy(c));
         this.machinePocket = this.localStorageService.get('machine-pocket', [
             new Coin(1, '', 1, 100),
             new Coin(2, '', 2, 100),
             new Coin(5, '', 5, 100),
             new Coin(10, '', 10, 100),
-        ]).map(c => new Coin(c.id, c.title, c.amount, c.count));
+        ]).map(c => copy(c));
         this.products = this.localStorageService.get('products', [
             new Product(13, 'Чай', 13, 10),
             new Product(18, 'Кофе', 18, 20),
@@ -41,7 +41,7 @@ export class VendingMachineService {
     pushCoin(coin: Coin): void {
         this.userPocket.find(p => p.id == coin.id).count--;
         this.pendingAmountValue += coin.amount;
-        push(this.machinePocket, coin.id);
+        this.machinePocket = merge(this.machinePocket, [ coin.one() ]);
         this.localStorageService.set('user-pocket', this.userPocket);
         this.localStorageService.set('machine-pocket', this.machinePocket);
         this.localStorageService.set('pending-amount-value', this.pendingAmountValue);
@@ -76,7 +76,7 @@ export class VendingMachineService {
                 }
             }
         }
-        merge(this.userPocket, change);
+        this.userPocket = merge(this.userPocket, change);
         this.pendingAmountValue = changeAmount;
 
         this.localStorageService.set('user-pocket', this.userPocket);
