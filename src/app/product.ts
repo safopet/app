@@ -6,8 +6,4 @@ export class Product {
         public count: number
     ) {
     }
-   
-    copy() : Product {
-        return new Product(this.id, this.name, this.price, this.count);
-    }
 }

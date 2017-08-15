@@ -39,12 +39,15 @@ export class VendingMachineService {
     }
 
     pushCoin(coin: Coin): void {
-        this.userPocket.find(p => p.id == coin.id).count--;
-        this.pendingAmountValue += coin.amount;
-        this.machinePocket = merge(this.machinePocket, [ coin.one() ]);
-        this.localStorageService.set('user-pocket', this.userPocket);
-        this.localStorageService.set('machine-pocket', this.machinePocket);
-        this.localStorageService.set('pending-amount-value', this.pendingAmountValue);
+        let userCoin = this.userPocket.find(p => p.id == coin.id);
+        if (userCoin.count > 0) {
+            userCoin.count--;
+            this.pendingAmountValue += coin.amount;
+            this.machinePocket = merge(this.machinePocket, [ coin.one() ]);
+            this.localStorageService.set('user-pocket', this.userPocket);
+            this.localStorageService.set('machine-pocket', this.machinePocket);
+            this.localStorageService.set('pending-amount-value', this.pendingAmountValue);
+        }
     }
 
     getProduct(id: number): boolean {
@@ -64,6 +67,9 @@ export class VendingMachineService {
     getChange(): boolean {
         var changeAmount = this.pendingAmountValue;
         var change: Coin[] = [];
+
+        var temp = JSON.stringify(this.machinePocket);
+
         for(let coin of this.machinePocket.sort((a,b) => b.amount - a.amount)) {
             let x = Math.min(coin.count,  Math.trunc(changeAmount / coin.amount));
             if (x > 0) {                
@@ -76,14 +82,18 @@ export class VendingMachineService {
                 }
             }
         }
-        this.userPocket = merge(this.userPocket, change);
-        this.pendingAmountValue = changeAmount;
+        if (changeAmount == 0) {
+            this.userPocket = merge(this.userPocket, change);
+            this.pendingAmountValue = changeAmount;
 
-        this.localStorageService.set('user-pocket', this.userPocket);
-        this.localStorageService.set('machine-pocket', this.machinePocket);
-        this.localStorageService.set('pending-amount-value', this.pendingAmountValue);
-
-        return this.pendingAmountValue == 0;
+            this.localStorageService.set('user-pocket', this.userPocket);
+            this.localStorageService.set('machine-pocket', this.machinePocket);
+            this.localStorageService.set('pending-amount-value', this.pendingAmountValue);
+            return true;
+        } else {
+            this.machinePocket = JSON.parse(temp).map(c => copy(c));
+            return false;
+        }
     }
 
     private pendingAmountValue: number;

@@ -1,4 +1,4 @@
-import { Coin, merge } from './coin';
+import { Coin, merge, copy } from './coin';
 
 describe('Testing Coin', () => {
     let coins1 : Coin[];
@@ -20,7 +20,7 @@ describe('Testing Coin', () => {
         let original = new Coin(3, '', 3, 20);
 
         // when
-        let copied = original.copy();
+        let copied = copy(original);
 
         // then
         expect(copied).toEqual(new Coin(3, '', 3, 20));

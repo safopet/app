@@ -2,7 +2,9 @@ import { Injectable } from '@angular/core';
 
 @Injectable()
 export class LocalStorageService {
-    clear():void { localStorage.clear(); }
+    clear():void { 
+        localStorage.clear(); 
+    }
 
     get(key: string, defaultValue?: any): any {
         let item = localStorage.getItem(key);
